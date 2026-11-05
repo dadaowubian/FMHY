@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f5ee" />
+    <meta name="description" content="A community-maintained guide to free media, tools, learning resources, and more." />
+    <title>FMHY — Free Media Heck Yeah</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f4f5ee;
+        --ink: #17211b;
+        --muted: #68736b;
+        --line: #dce1d7;
+        --green: #c9f56a;
+        --green-dark: #31532d;
+        --white: #fff;
+        --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--sans);
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: inherit; }
+      button, input { font: inherit; }
+      .shell { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+      .topbar {
+        height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+      .brand-mark {
+        display: grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        border-radius: 11px;
+        background: var(--ink);
+        color: var(--green);
+        font-size: 13px;
+        font-weight: 850;
+        letter-spacing: -1px;
+      }
+      .brand-name { font-size: 14px; font-weight: 760; letter-spacing: -.3px; }
+      .brand-caption { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; letter-spacing: .03em; }
+      .top-actions { display: flex; align-items: center; gap: 10px; }
+      .top-link {
+        display: inline-flex;
+        min-height: 38px;
+        align-items: center;
+        gap: 8px;
+        padding: 0 13px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 650;
+        text-decoration: none;
+        transition: border-color .18s ease, background .18s ease;
+      }
+      .top-link:hover { border-color: var(--ink); background: var(--white); }
+      .top-link.primary { border-color: var(--green); background: var(--green); }
+      .top-link.primary:hover { border-color: #b5e653; background: #b5e653; }
+      .arrow { font-size: 15px; line-height: 1; }
+
+      .hero { padding: 74px 0 50px; }
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0 0 19px;
+        color: var(--green-dark);
+        font: 700 10px/1 var(--mono);
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+      .eyebrow::before { width: 21px; height: 2px; background: var(--green-dark); content: ""; }
+      h1 {
+        max-width: 790px;
+        margin: 0;
+        font-size: clamp(46px, 8vw, 88px);
+        font-weight: 720;
+        letter-spacing: -.075em;
+        line-height: .98;
+      }
+      h1 span { color: #839087; }
+      .hero-bottom {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 30px;
+        margin-top: 28px;
+      }
+      .hero-copy { max-width: 480px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
+      .hero-stats { display: flex; gap: 27px; flex: 0 0 auto; }
+      .stat { display: flex; align-items: baseline; gap: 7px; }
+      .stat strong { font-size: 20px; letter-spacing: -.05em; }
+      .stat span { color: var(--muted); font: 10px var(--mono); text-transform: uppercase; }
+
+      .directory { padding: 0 0 78px; }
+      .directory-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 16px 0;
+        border-top: 1px solid var(--line);
+      }
+      .directory-title { display: flex; align-items: baseline; gap: 11px; }
+      .directory-title h2 { margin: 0; font-size: 15px; font-weight: 740; letter-spacing: -.02em; }
+      .result-count { color: var(--muted); font: 10px var(--mono); }
+      .search-wrap { position: relative; width: min(100%, 330px); }
+      .search-icon { position: absolute; top: 50%; left: 13px; color: var(--muted); transform: translateY(-50%); pointer-events: none; }
+      .search-input {
+        width: 100%;
+        height: 42px;
+        padding: 0 42px 0 38px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        outline: none;
+        background: rgba(255,255,255,.62);
+        color: var(--ink);
+        font-size: 12px;
+        transition: border-color .18s ease, box-shadow .18s ease;
+      }
+      .search-input::placeholder { color: #89938b; }
+      .search-input:focus { border-color: #71816f; box-shadow: 0 0 0 3px rgba(49,83,45,.09); }
+      .search-hint {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        padding: 3px 5px;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        color: var(--muted);
+        font: 9px var(--mono);
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+      .card-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+      .category-card {
+        position: relative;
+        display: flex;
+        min-height: 146px;
+        flex-direction: column;
+        padding: 19px 19px 17px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: rgba(255,255,255,.55);
+        text-decoration: none;
+        transition: transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+      }
+      .category-card:hover { transform: translateY(-3px); border-color: #b7c1b4; background: var(--white); box-shadow: 0 10px 28px rgba(23,33,27,.06); }
+      .card-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: auto; }
+      .category-index { color: #8a958c; font: 10px var(--mono); }
+      .card-arrow { color: #8a958c; font-size: 17px; transition: transform .2s ease, color .2s ease; }
+      .category-card:hover .card-arrow { color: var(--ink); transform: translate(2px, -2px); }
+      .category-card h3 { margin: 20px 0 6px; font-size: 16px; font-weight: 720; letter-spacing: -.035em; }
+      .category-card p { max-width: 275px; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+      .empty-state { display: none; padding: 46px 20px; border: 1px dashed #c6cec2; border-radius: 10px; color: var(--muted); text-align: center; font-size: 13px; }
+      .empty-state.visible { display: block; }
+
+      .bottom-panel {
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 30px;
+        padding: 26px;
+        border-radius: 12px;
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .bottom-panel h2 { margin: 0 0 8px; font-size: 19px; letter-spacing: -.04em; }
+      .bottom-panel p { max-width: 430px; margin: 0; color: #aab4ab; font-size: 12px; line-height: 1.65; }
+      .quick-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; align-content: center; }
+      .quick-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 39px;
+        gap: 10px;
+        padding: 0 11px;
+        border: 1px solid #36413a;
+        border-radius: 7px;
+        color: #eef1e9;
+        font-size: 10px;
+        text-decoration: none;
+        transition: border-color .18s ease, background .18s ease;
+      }
+      .quick-link:hover { border-color: #76836f; background: #202b23; }
+      .quick-link span:last-child { color: var(--green); font-size: 13px; }
+      footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 0 27px; color: var(--muted); font-size: 10px; }
+      footer a { text-decoration-color: #aeb8ac; text-underline-offset: 3px; }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+      @media (max-width: 760px) {
+        .shell { width: min(100% - 32px, 560px); }
+        .topbar { height: 66px; }
+        .brand-caption { display: none; }
+        .top-link { min-height: 35px; padding: 0 10px; font-size: 11px; }
+        .hero { padding: 58px 0 38px; }
+        .hero-bottom { align-items: start; flex-direction: column; gap: 20px; }
+        .hero-copy { font-size: 14px; }
+        .directory-head { align-items: stretch; flex-direction: column; gap: 13px; }
+        .search-wrap { width: 100%; }
+        .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+        .category-card { min-height: 141px; padding: 15px; }
+        .category-card h3 { font-size: 14px; }
+        .category-card p { font-size: 10px; }
+        .bottom-panel { grid-template-columns: 1fr; gap: 22px; padding: 22px; }
+      }
+      @media (max-width: 420px) {
+        .brand-name { font-size: 12px; }
+        .brand-mark { width: 34px; height: 34px; }
+        .top-actions { gap: 6px; }
+        .top-link { padding-inline: 8px; }
+        .card-grid { grid-template-columns: 1fr; }
+        .category-card { min-height: 124px; }
+        .quick-links { grid-template-columns: 1fr; }
+        footer { align-items: start; flex-direction: column; gap: 8px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="shell topbar">
+      <a class="brand" href="#top" aria-label="FMHY home">
+        <span class="brand-mark" aria-hidden="true">FMHY</span>
+        <span><span class="brand-name">Free Media Heck Yeah</span><span class="brand-caption">The community resource index</span></span>
+      </a>
+      <nav class="top-actions" aria-label="Main navigation">
+        <a class="top-link" href="https://github.com/dadaowubian/FMHY" target="_blank" rel="noreferrer">View source <span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="top-link primary" href="#directory">Explore index <span class="arrow" aria-hidden="true">↓</span></a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="shell hero" aria-labelledby="hero-title">
+        <p class="eyebrow">The internet, better indexed</p>
+        <h1 id="hero-title">Find your next<br /><span>rabbit hole.</span></h1>
+        <div class="hero-bottom">
+          <p class="hero-copy">A community-built guide to media, useful tools, learning resources, and the corners of the web worth knowing about.</p>
+          <div class="hero-stats" aria-label="Directory statistics">
+            <div class="stat"><strong id="section-total">18</strong><span>sections</span></div>
+            <div class="stat"><strong>01</strong><span>open index</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="shell directory" id="directory" aria-labelledby="directory-title">
+        <div class="directory-head">
+          <div class="directory-title">
+            <h2 id="directory-title">Browse the index</h2>
+            <span class="result-count" id="result-count" aria-live="polite">16 sections</span>
+          </div>
+          <label class="search-wrap">
+            <span class="sr-only">Search sections</span>
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input class="search-input" id="section-search" type="search" placeholder="Search sections…" autocomplete="off" />
+            <span class="search-hint" aria-hidden="true">/</span>
+          </label>
+        </div>
+        <div class="card-grid" id="card-grid"></div>
+        <div class="empty-state" id="empty-state" role="status">No sections match that search. Try another keyword.</div>
+      </section>
+
+      <section class="shell bottom-panel" aria-labelledby="more-title">
+        <div>
+          <h2 id="more-title">Keep exploring</h2>
+          <p>Browse community resources, discover more sections, or learn how to contribute to the index.</p>
+        </div>
+        <nav class="quick-links" aria-label="More FMHY resources">
+          <a class="quick-link" href="https://www.reddit.com/r/FREEMEDIAHECKYEAH/wiki/more-sections" target="_blank" rel="noreferrer"><span>More sections</span><span aria-hidden="true">↗</span></a>
+          <a class="quick-link" href="https://redd.it/105xraz" target="_blank" rel="noreferrer"><span>Search FMHY</span><span aria-hidden="true">↗</span></a>
+          <a class="quick-link" href="https://fmhy.net/other/contributing" target="_blank" rel="noreferrer"><span>Contribute</span><span aria-hidden="true">↗</span></a>
+          <a class="quick-link" href="https://fmhy.net/other/selfhosting" target="_blank" rel="noreferrer"><span>Self-hosting guide</span><span aria-hidden="true">↗</span></a>
+        </nav>
+      </section>
+    </main>
+
+    <footer class="shell">
+      <span>FMHY · Free Media Heck Yeah</span>
+      <span>Made with care by the community · <a href="https://fmhy.net/feedback" target="_blank" rel="noreferrer">Feedback</a></span>
+    </footer>
+
+    <script>
+      const sections = [
+        { title: "📚 Beginners Guide", description: "A Guide for Beginners + FAQs", url: "https://fmhy.net/beginners-guide" },
+        { title: "📛 Adblocking / Privacy", description: "Adblocking, Privacy, VPNs, Proxies, Antivirus", url: "https://github.com/fmhy/FMHY/wiki/Adblock" },
+        { title: "🤖 Artificial Intelligence", description: "Chat Bots, Text Generators, Image Generators, Chatbot Tools", url: "https://github.com/fmhy/FMHY/wiki/Artificial-Intelligence" },
+        { title: "📺 Movies / TV / Anime", description: "Stream Videos, Download Videos, Torrent Videos", url: "https://github.com/fmhy/FMHY/wiki/Streaming" },
+        { title: "🎵 Music / Podcasts / Radio", description: "Stream Audio, Download Audio, Torrent Audio", url: "https://github.com/fmhy/FMHY/wiki/Music" },
+        { title: "🎮 Gaming / Emulation", description: "Download Games, ROMs, Gaming Tools", url: "https://github.com/fmhy/FMHY/wiki/Gaming" },
+        { title: "📗 Books / Comics / Manga", description: "Books, Comics, Magazines, Newspapers", url: "https://github.com/fmhy/FMHY/wiki/Reading" },
+        { title: "💾 Downloading", description: "Download Sites, Software Sites, Open Directories", url: "https://github.com/fmhy/FMHY/wiki/Downloading" },
+        { title: "🌀 Torrenting", description: "Torrent Clients, Torrent Sites, Trackers", url: "https://github.com/fmhy/FMHY/wiki/Torrenting" },
+        { title: "🧠 Educational", description: "Courses, Documentaries, Learning Resources", url: "https://github.com/fmhy/FMHY/wiki/Educational" },
+        { title: "🔧 Tools", description: "Internet Tools, System Tools, Audio Tools, Video Tools", url: "https://www.reddit.com/r/FREEMEDIAHECKYEAH/wiki/tools-index" },
+        { title: "📱 Android / iOS", description: "Apps, Jailbreaking, Android Emulators", url: "https://github.com/fmhy/FMHY/wiki/Mobile" },
+        { title: "🐧 Linux / macOS", description: "Apps, Software Sites, Gaming", url: "https://github.com/fmhy/FMHY/wiki/Linux" },
+        { title: "🌏 Non-English", description: "International Piracy Sites", url: "https://github.com/fmhy/FMHY/wiki/Non-Eng" },
+        { title: "📂 Miscellaneous", description: "Extensions, Indexes, News, Health, Food, Fun", url: "https://github.com/fmhy/FMHY/wiki/Misc" },
+        { title: "📑 Changelog", description: "Recent Additions and Updates", url: "https://www.reddit.com/r/FREEMEDIAHECKYEAH/comments/1pl8vl0/fmhy_changelog/" },
+        { title: "🔒 Backups", description: "FMHY Backups", url: "https://github.com/fmhy/FMHY/wiki/Backups" },
+        { title: "💬 Discord", description: "Chat, Get Help, Suggest Sites", url: "https://rentry.co/fmhy-invite" }
+      ];
+
+      const grid = document.querySelector("#card-grid");
+      const search = document.querySelector("#section-search");
+      const count = document.querySelector("#result-count");
+      const empty = document.querySelector("#empty-state");
+      document.querySelector("#section-total").textContent = String(sections.length);
+
+      function renderSections(query = "") {
+        const normalized = query.trim().toLocaleLowerCase();
+        const filtered = sections
+          .map((section, index) => ({ ...section, index }))
+          .filter(({ title, description }) => `${title} ${description}`.toLocaleLowerCase().includes(normalized));
+        const cards = filtered.map(({ title, description, url, index }) => {
+          const card = document.createElement("a");
+          card.className = "category-card";
+          card.href = url;
+          card.target = "_blank";
+          card.rel = "noreferrer";
+
+          const top = document.createElement("span");
+          top.className = "card-top";
+          const number = document.createElement("span");
+          number.className = "category-index";
+          number.textContent = `FMHY / ${String(index + 1).padStart(2, "0")}`;
+          const arrow = document.createElement("span");
+          arrow.className = "card-arrow";
+          arrow.setAttribute("aria-hidden", "true");
+          arrow.textContent = "↗";
+          top.append(number, arrow);
+
+          const heading = document.createElement("h3");
+          heading.textContent = title;
+          const summary = document.createElement("p");
+          summary.textContent = description;
+          card.append(top, heading, summary);
+          return card;
+        });
+
+        grid.replaceChildren(...cards);
+        count.textContent = `${filtered.length} ${filtered.length === 1 ? "section" : "sections"}`;
+        empty.classList.toggle("visible", filtered.length === 0);
+      }
+
+      search.addEventListener("input", (event) => renderSections(event.currentTarget.value));
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "/" && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) {
+          event.preventDefault();
+          search.focus();
+        }
+        if (event.key === "Escape" && document.activeElement === search) {
+          search.value = "";
+          renderSections();
+          search.blur();
+        }
+      });
+      renderSections();
+    </script>
+  </body>
+</html>
